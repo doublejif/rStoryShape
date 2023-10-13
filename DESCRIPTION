@@ -16,5 +16,3 @@ Imports:
     tidyverse,
     slam,
     text
-Remotes:
-    Rglpk@inst/extdata/Rglpk_0.6-5.tar.gz

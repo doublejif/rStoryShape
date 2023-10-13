@@ -2,3 +2,4 @@
 ^renv\.lock$
 ^rStoryShape\.Rproj$
 ^\.Rproj\.user$
+^README\.Rmd$
