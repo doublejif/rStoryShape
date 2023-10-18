@@ -24,7 +24,7 @@ To use this package, you need to make sure that your files are csv
 files. And the text should have the column name: text (case sensitive).
 
 ``` r
-#library(rStoryShape)
+# library(rStoryShape)
 ## basic example code
 ```
 
