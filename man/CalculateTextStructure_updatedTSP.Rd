@@ -14,7 +14,7 @@ CalculateTextStructure_updatedTSP(
 )
 }
 \arguments{
-\item{corpus}{This includes the file you want to analysis. The text must be contained in column "text" (or it woundn't work)}
+\item{corpus}{This includes the file you want to analysis, one row only. The text must be contained in column "text" (or it woundn't work)}
 
 \item{input_words}{This is the embedding you want to use. Default embedding is fastText English embedding ("https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.en.300.bin.gz"). If you want to create your own embedding, the first column must be "word" and contain the actual words; next columns should specify the embeddings}
 
@@ -37,26 +37,26 @@ library(rStoryShape)
 load("data/ft_model_test.Rdata")
 load("data/corpus.Rdata")
 for (i in seq_len(nrow(last_sheet_data))) {
-try_result <- tryCatch(
-  {
-    df_sin<-as.data.frame(last_sheet_data[i,])
-    text <- as.data.frame(last_sheet_data[i,2])
-    result <- CalculateTextStructure_updatedTSP(text,input_words=ft_model,type_of_window = 'length',window_length = 10)
-    result_combined <- cbind(
-      df_sin,
-      result[[1]][c('speed', 'volume', 'circuitousness')]
-    )
-    final_return_df <- rbind(final_return_df, result_combined)
-    print(i)
-  },
-  error = function(err) {
-    cat("Error occurred for row", i, ": ", conditionMessage(err), "\n")
-  }
-)
-print(final_return_df)
+  try_result <- tryCatch(
+    {
+      df_sin <- as.data.frame(last_sheet_data[i, ])
+      text <- as.data.frame(last_sheet_data[i, 2])
+      result <- CalculateTextStructure_updatedTSP(text, input_words = ft_model, type_of_window = "length", window_length = 10)
+      result_combined <- cbind(
+        df_sin,
+        result[[1]][c("speed", "volume", "circuitousness")]
+      )
+      final_return_df <- rbind(final_return_df, result_combined)
+      print(i)
+    },
+    error = function(err) {
+      cat("Error occurred for row", i, ": ", conditionMessage(err), "\n")
+    }
+  )
+  print(final_return_df)
 
-if (inherits(try_result, "try-error")) {
-  cat("Skipping row", i, "\n")
-}
+  if (inherits(try_result, "try-error")) {
+    cat("Skipping row", i, "\n")
+  }
 }
 }

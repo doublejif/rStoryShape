@@ -5,7 +5,7 @@
 \title{The main runner for the code. Get the charateristics summary of speed, volumne and circuitousness}
 \usage{
 get_the_data(
-  path_for_corpus,
+  corpus,
   path_for_emb,
   type_of_window = "sentence",
   window_length = 250,
@@ -14,8 +14,6 @@ get_the_data(
 )
 }
 \arguments{
-\item{path_for_corpus}{The path in your dirver you put your corpus}
-
 \item{path_for_emb}{The path in your driver you put your downloading embedding. Rdata file. If you have a csv file, please use function CalculateTextStructure_updatedTSP()}
 
 \item{type_of_window}{Default="sentence". Two alternative values, "sentence" or "length". "length" means that you want to divide the text with exactly the length of words. And 'sentence' means that your dividing never break a sentence in the middle point but finish the sentences instead.}
@@ -25,6 +23,8 @@ get_the_data(
 \item{include_extension_speed}{Include additional result or not. Default=False.(If True, then speed of program may be slow)}
 
 \item{include_extension_volume}{Include additional volumn or not. Default=False.(If True, then speed of program may be slow)}
+
+\item{path_for_corpus}{The path in your dirver you put your corpus}
 }
 \value{
 The speed, volume and circuitousness of the text.
@@ -34,29 +34,30 @@ The main runner for the code. Get the charateristics summary of speed, volumne a
 }
 \examples{
 library(rStoryShape)
-path_for_emb="data/ft_model_test.Rdata"
-path_for_corpus="data/corpus.Rdata"
-for (i in seq_len(nrow(last_sheet_data))) {
-try_result <- tryCatch(
-  {
-    df_sin<-as.data.frame(last_sheet_data[i,])
-    text <- as.data.frame(last_sheet_data[i,2])
-    result <- get_the_data(path_for_corpus,path_for_emb,type_of_window = 'length',window_length = 10)
-    result_combined <- cbind(
-      df_sin,
-      result[[1]][c('speed', 'volume', 'circuitousness')]
-    )
-    final_return_df <- rbind(final_return_df, result_combined)
-    print(i)
-  },
-  error = function(err) {
-    cat("Error occurred for row", i, ": ", conditionMessage(err), "\n")
-  }
-)
-print(final_return_df)
+path_for_emb <- "data/ft_model_test.Rdata"
+path_for_corpus <- "data/corpus.Rdata"
+load(path_for_corpus)
+for (i in seq_len(nrow(corpus))) {
+  try_result <- tryCatch(
+    {
+      df_sin <- as.data.frame(corpus[i, ])
+      text <- data.frame('text'=corpus[i, 2])
+      result <- get_the_data(text, path_for_emb, type_of_window = "length", window_length = 10)
+      result_combined <- cbind(
+        df_sin,
+        result[[1]][c("speed", "volume", "circuitousness")]
+      )
+      final_return_df <- rbind(final_return_df, result_combined)
+      print(i)
+    },
+    error = function(err) {
+      cat("Error occurred for row", i, ": ", conditionMessage(err), "\n")
+    }
+  )
+  print(final_return_df)
 
-if (inherits(try_result, "try-error")) {
-  cat("Skipping row", i, "\n")
-}
+  if (inherits(try_result, "try-error")) {
+    cat("Skipping row", i, "\n")
+  }
 }
 }

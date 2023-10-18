@@ -18,5 +18,5 @@ All possible subtour in our route results
 Subtours detection function
 }
 \examples{
-detectSubtours(x_tsp,idxs)
+detectSubtours(x_tsp, idxs)
 }

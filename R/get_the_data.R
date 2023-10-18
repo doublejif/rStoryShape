@@ -14,12 +14,13 @@
 #' library(rStoryShape)
 #' path_for_emb <- "data/ft_model_test.Rdata"
 #' path_for_corpus <- "data/corpus.Rdata"
-#' for (i in seq_len(nrow(last_sheet_data))) {
+#' load(path_for_corpus)
+#' for (i in seq_len(nrow(corpus))) {
 #'   try_result <- tryCatch(
 #'     {
-#'       df_sin <- as.data.frame(last_sheet_data[i, ])
-#'       text <- as.data.frame(last_sheet_data[i, 2])
-#'       result <- get_the_data(path_for_corpus, path_for_emb, type_of_window = "length", window_length = 10)
+#'       df_sin <- as.data.frame(corpus[i, ])
+#'       text <- data.frame('text'=corpus[i, 2])
+#'       result <- get_the_data(text, path_for_emb, type_of_window = "length", window_length = 10)
 #'       result_combined <- cbind(
 #'         df_sin,
 #'         result[[1]][c("speed", "volume", "circuitousness")]
@@ -37,9 +38,8 @@
 #'     cat("Skipping row", i, "\n")
 #'   }
 #' }
-get_the_data <- function(path_for_corpus, path_for_emb, type_of_window = "sentence", window_length = 250, include_extension_speed = FALSE, include_extension_volume = FALSE) {
+get_the_data <- function(corpus, path_for_emb, type_of_window = "sentence", window_length = 250, include_extension_speed = FALSE, include_extension_volume = FALSE) {
   ft_model <- load(path_for_emb)
-  corpus <- read.csv(path_for_corpus)
-  result <- CalculateTextStructure_updatedTSP(corpus = get(corpus), input_words = get(ft_model), type_of_window = type_of_window, window_length = window_length, include_extension_speed = include_extensio_speed, include_extension_volume = include_extension_volume)
+  result <- CalculateTextStructure_updatedTSP(corpus, input_words = get(ft_model), type_of_window = type_of_window, window_length = window_length, include_extension_speed = include_extensio_speed, include_extension_volume = include_extension_volume)
   return(result)
 }

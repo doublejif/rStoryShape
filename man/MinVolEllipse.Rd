@@ -18,5 +18,5 @@ The matrix and value required for our further calculation
 Inner function use to calculate the shortest path
 }
 \examples{
-MinVolEllipse(P,1e-5)
+MinVolEllipse(P, 1e-5)
 }
