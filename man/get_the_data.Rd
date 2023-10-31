@@ -5,8 +5,9 @@
 \title{The main runner for the code. Get the charateristics summary of speed, volumne and circuitousness}
 \usage{
 get_the_data(
-  corpus,
+  path_for_corpus,
   path_for_emb,
+  own_emb = FALSE,
   type_of_window = "sentence",
   window_length = 250,
   include_extension_speed = FALSE,
@@ -14,7 +15,11 @@ get_the_data(
 )
 }
 \arguments{
-\item{path_for_emb}{The path in your driver you put your downloading embedding. Rdata file. If you have a csv file, please use function CalculateTextStructure_updatedTSP()}
+\item{path_for_corpus}{The path of your corpus. It should be an csv file with your text column be named as "text"}
+
+\item{path_for_emb}{If own_emb=FALSE, it means that you would use the embedding we provided.Then this parameter should be the path you put the downloaded Rdata (link: \url{https://drive.google.com/uc?export=download&id=1Nq--lnyG_9cLdjcjVPe4tVl3nqyIm8WT}). If own_emb=TRUE, it means that you would use the your own embedding. Please prepare the embedding (csv file) with standard format. You could download the sample embedding with standard format with this link\url{https://drive.google.com/uc?export=download&id=1koC_c7U2vXJQyl1jAtUa8W7holN1WmLf}.}
+
+\item{own_emb}{Default=FALSE. Use your own embedding or not}
 
 \item{type_of_window}{Default="sentence". Two alternative values, "sentence" or "length". "length" means that you want to divide the text with exactly the length of words. And 'sentence' means that your dividing never break a sentence in the middle point but finish the sentences instead.}
 
@@ -23,8 +28,6 @@ get_the_data(
 \item{include_extension_speed}{Include additional result or not. Default=False.(If True, then speed of program may be slow)}
 
 \item{include_extension_volume}{Include additional volumn or not. Default=False.(If True, then speed of program may be slow)}
-
-\item{path_for_corpus}{The path in your dirver you put your corpus}
 }
 \value{
 The speed, volume and circuitousness of the text.

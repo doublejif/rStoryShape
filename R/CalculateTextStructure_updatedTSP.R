@@ -1,7 +1,7 @@
-#' Speed, volume and circuitousness calculation
+#' Speed, volume and circuitousness calculation for one single row of text
 #'
 #' @param corpus This includes the file you want to analysis, one row only. The text must be contained in column "text" (or it woundn't work)
-#' @param input_words This is the embedding you want to use. Default embedding is fastText English embedding ("https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.en.300.bin.gz"). If you want to create your own embedding, the first column must be "word" and contain the actual words; next columns should specify the embeddings
+#' @param input_words This is the embedding you want to use. Default embedding could be downloaded with this link <https://drive.google.com/uc?export=download&id=1Nq--lnyG_9cLdjcjVPe4tVl3nqyIm8WT>. If you want to create your own embedding, the first column must be "word" and contain the actual words, and follows the embedding matrix. You could take a look at the standard format of embedding by running View()
 #' @param type_of_window Default="sentence". Two alternative values, "sentence" or "length". "length" means that you want to divide the text with exactly the length of words. And 'sentence' means that your dividing never break a sentence in the middle point but finish the sentences instead.
 #' @param window_length Int, While type_of_window="length", it will divided the text with the length of exactly this value. Here you could set the length of windows=1 and type_of_window="length" to seperate the text with each sentence
 #' @param include_extension_speed Include additional result or not. Default=False.(If True, then speed of program may be slow)
@@ -14,6 +14,7 @@
 #' library(rStoryShape)
 #' load("data/ft_model_test.Rdata")
 #' load("data/corpus.Rdata")
+#' final_return_df <- data.frame()
 #' for (i in seq_len(nrow(last_sheet_data))) {
 #'   try_result <- tryCatch(
 #'     {
