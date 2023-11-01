@@ -11,6 +11,9 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+library(slam)
+library(Rglpk)
+library(Matrix)
 ```
 
 # rStoryShape
@@ -18,32 +21,72 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of rStoryShape is to calculate the speed, volumn and circuitousness from this paper: [Toubia, O., Berger, J., & Eliashberg, J. (2021). How quantifying the shape of stories predicts their success. Proceedings of the National Academy of Sciences, 118(26), e2011695118.](https://www.pnas.org/doi/epdf/10.1073/pnas.2011695118)
+The `rStoryShape` R package is designed to calculate key storytelling metrics, including speed, volume, and circuitousness, based on the research conducted in the paper titled [How quantifying the shape of stories predicts their success](https://www.pnas.org/doi/epdf/10.1073/pnas.2011695118) by Toubia, O., Berger, J., & Eliashberg (2021) published in the Proceedings of the National Academy of Sciences.
+
+This package provides a set of functions and tools to help you analyze and quantify the shape of stories, allowing you to gain insights into their potential success. Whether you're a researcher, storyteller, or data analyst, `rStoryShape` empowers you to apply storytelling metrics in your work, enhancing your ability to craft and evaluate compelling narratives.
+
+Key features:
+- Calculate storytelling speed, volumn, and circuitousness.
+- Apply storytelling metrics to assess narrative impact.
+- Empower your storytelling research and analysis.
+
+With `rStoryShape`, you can harness the science of storytelling to create more engaging and impactful narratives.
 
 ## Installation
 
-You can install the development version of rStoryShape from [GitHub](https://github.com/) with:
 
-``` r
-# install.packages("devtools")
+To use the `rStoryShape` R package, follow these steps:
+
+### Step 1: Install devtools (if not already installed)
+
+Before you can install `rStoryShape`, you may need to install the `devtools` package if you haven't already. You can do this by running the following command in your R environment:
+
+```r
+install.packages("devtools")
+```
+### Step 2: Install rStoryShape
+With devtools installed, you can proceed to install rStoryShape from our GitHub repository. Use the following R code:
+
+```r
 devtools::install_github("doublejif/rStoryShape")
 ```
+### Step 3: Download the FastText Embedding File
+To make the most of rStoryShape, you'll need to download the fastText embedding file in RData format. This file is quite large (approximately 4.63GB), so make sure you have sufficient disk space. You can download it using the following link:
 
-Besides this, you may also need to download this fastText embedding file in the format of Rdata (4.63G) with the following link:
+[Download rStoryShape FastText Embedding File](https://drive.google.com/uc?export=download&id=1Nq--lnyG_9cLdjcjVPe4tVl3nqyIm8WT)
 
-<https://drive.google.com/uc?export=download&id=1Nq--lnyG_9cLdjcjVPe4tVl3nqyIm8WT>
+Please keep track of the download path on your local system, as you'll need it during the package usage.
 
-You may also need to keep the download path in mind.
+With these steps, you'll be fully equipped to quantify storytelling metrics, gain valuable insights into your narratives, and make the most of rStoryShape for your projects.
 
-## Example
+### Note: Package Reading Problems
 
-To use this package, you need to make sure that your corpus files are csv files. And the text should have the column name: text (case sensitive).
+Before using the `rStoryShape` package, ensure that you have the following R packages installed to avoid any reading problems:
 
-### Example 1: your own embedding
+```r
+library(slam)
+library(Rglpk)
+library(Matrix)
+```
 
-If you use your own embedding, you could use this package like the following examples (for more format about the embedding, please visit the website: <https://fasttext.cc/docs/en/unsupervised-tutorial.html>, in the ***Printing word vectors*** sections, click the ***Python*** option).
+These packages are essential for the proper functioning of rStoryShape and for avoiding any issues when working with storytelling metrics.
 
-***Note***: The result shows the error message due to the over-small size of our testing embedding file. Downloading the large size embedding file and put it in your local computer would solve this error.
+## Usage with Your Own Embedding
+
+If you wish to use your own embedding with the `rStoryShape` package, please follow these guidelines:
+
+1. **Data Format**: Ensure that your corpus files are in CSV format. Each CSV file should have a column named "text" (case sensitive) containing the text data you want to analyze.
+
+2. **Embedding Format**: If you intend to use your own embedding, please make sure it follows the standard format as specified [here](https://drive.google.com/uc?export=download&id=1koC_c7U2vXJQyl1jAtUa8W7holN1WmLf). Specifically, the first column in your embedding file should be named "word" (case sensitive).
+
+3. **Embedding File Format**: Your embedding file can be in either CSV or Rdata format (files end with ".csv" or ".Rdata"). Ensure that your embedding data adheres to the required structure.
+
+By following these steps, you can seamlessly use your own embeddings with the `rStoryShape` package, allowing for customized analysis of storytelling metrics.
+
+For more details and examples, refer to the package documentation.
+
+
+### A Simple Example
 
 ```{r example}
 library(rStoryShape)
@@ -54,78 +97,12 @@ library(rStoryShape)
 #  ,   b1 b2 b3 b4 ... b299 b300
 # ...  .. .. .. .. ...  ..   ..
 # the  n1 n2 n3 n4 ... n299 n300
-load("data/ft_model_test.Rdata")
-load("data/corpus.Rdata")
-final_return_df <- data.frame()
-for (i in seq_len(nrow(corpus))) {
-    try_result <- tryCatch(
-      {
-        df_sin<-as.data.frame(corpus[i,])
-        text <- data.frame('text'=corpus[i,'text'])
-        
-        ## Set the type of windows as sentence and make window_length =1, then we could split the text according to each sentence
-        result <- CalculateTextStructure_updatedTSP(text,input_words=new_model,type_of_window = 'sentence',window_length = 1)
-        result_combined <- cbind(
-          df_sin,
-          result[[1]][c('speed', 'volume', 'circuitousness')]
-        )
-        final_return_df <- rbind(final_return_df, result_combined)
-        print(i)
-      },
-      error = function(err) {
-        cat("Error occurred for row", i, ": ", conditionMessage(err), "\n")
-      }
-    )
-    
-    if (inherits(try_result, "try-error")) {
-      cat("Skipping row", i, "\n")
-    }
-  }
-  
-  # Print or further process the final_return_df
-  print(final_return_df)
 
+## You could replace the path here with the path you save your embedding
+path_for_emb<-"data/ft_model_test.Rdata"
+path_for_corpus<-"data/corpus.Rdata"
+result<-get_the_data(path_for_corpus, path_for_emb, own_emb=FALSE,type_of_window = "length", window_length = 10)
+print(result)
 ```
 
-### Example 1: download the embedding file we provided
 
-The dataset could be downloaded with this link:
-
-<https://drive.google.com/uc?export=download&id=1Nq--lnyG_9cLdjcjVPe4tVl3nqyIm8WT>
-
-After you download it, use it as the following example. Remeber to change the PATH to your own path.
-
-```{r example}
-## replace the PATH with your own path
-PATH="data/ft_model_test.Rdata"
-load("data/corpus.Rdata")
-final_return_df <- data.frame()
-for (i in seq_len(nrow(corpus))) {
-    try_result <- tryCatch(
-      {
-        df_sin<-as.data.frame(corpus[i,])
-        text <- data.frame('text'=corpus[i,'text'])
-        
-        ## Set the type of windows as sentence and make window_length =1, then we could split the text according to each sentence
-        result <- get_the_data(text,input_words=new_model,type_of_window = 'sentence',window_length = 1)
-        result_combined <- cbind(
-          df_sin,
-          result[[1]][c('speed', 'volume', 'circuitousness')]
-        )
-        final_return_df <- rbind(final_return_df, result_combined)
-        print(i)
-      },
-      error = function(err) {
-        cat("Error occurred for row", i, ": ", conditionMessage(err), "\n")
-      }
-    )
-    
-    if (inherits(try_result, "try-error")) {
-      cat("Skipping row", i, "\n")
-    }
-  }
-  
-  # Print or further process the final_return_df
-  print(final_return_df)
-
-```

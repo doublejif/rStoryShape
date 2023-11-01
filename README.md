@@ -6,46 +6,108 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of rStoryShape is to calculate the speed, volumn and
-circuitousness from this paper: [Toubia, O., Berger, J., & Eliashberg,
-J. (2021). How quantifying the shape of stories predicts their success.
-Proceedings of the National Academy of Sciences, 118(26),
-e2011695118.](https://www.pnas.org/doi/epdf/10.1073/pnas.2011695118)
+The `rStoryShape` R package is designed to calculate key storytelling
+metrics, including speed, volume, and circuitousness, based on the
+research conducted in the paper titled [How quantifying the shape of
+stories predicts their
+success](https://www.pnas.org/doi/epdf/10.1073/pnas.2011695118) by
+Toubia, O., Berger, J., & Eliashberg (2021) published in the Proceedings
+of the National Academy of Sciences.
+
+This package provides a set of functions and tools to help you analyze
+and quantify the shape of stories, allowing you to gain insights into
+their potential success. Whether you’re a researcher, storyteller, or
+data analyst, `rStoryShape` empowers you to apply storytelling metrics
+in your work, enhancing your ability to craft and evaluate compelling
+narratives.
+
+Key features: - Calculate storytelling speed, volumn, and
+circuitousness. - Apply storytelling metrics to assess narrative
+impact. - Empower your storytelling research and analysis.
+
+With `rStoryShape`, you can harness the science of storytelling to
+create more engaging and impactful narratives.
 
 ## Installation
 
-You can install the development version of rStoryShape from
-[GitHub](https://github.com/) with:
+To use the `rStoryShape` R package, follow these steps:
+
+### Step 1: Install devtools (if not already installed)
+
+Before you can install `rStoryShape`, you may need to install the
+`devtools` package if you haven’t already. You can do this by running
+the following command in your R environment:
 
 ``` r
-# install.packages("devtools")
+install.packages("devtools")
+```
+
+### Step 2: Install rStoryShape
+
+With devtools installed, you can proceed to install rStoryShape from our
+GitHub repository. Use the following R code:
+
+``` r
 devtools::install_github("doublejif/rStoryShape")
 ```
 
-Besides this, you may also need to download this fastText embedding file
-in the format of Rdata (4.63G) with the following link:
+### Step 3: Download the FastText Embedding File
 
-<https://drive.google.com/uc?export=download&id=1Nq--lnyG_9cLdjcjVPe4tVl3nqyIm8WT>
+To make the most of rStoryShape, you’ll need to download the fastText
+embedding file in RData format. This file is quite large (approximately
+4.63GB), so make sure you have sufficient disk space. You can download
+it using the following link:
 
-You may also need to keep the download path in mind.
+[Download rStoryShape FastText Embedding
+File](https://drive.google.com/uc?export=download&id=1Nq--lnyG_9cLdjcjVPe4tVl3nqyIm8WT)
 
-## Example
+Please keep track of the download path on your local system, as you’ll
+need it during the package usage.
 
-To use this package, you need to make sure that your corpus files are
-csv files. And the text should have the column name: text (case
-sensitive).
+With these steps, you’ll be fully equipped to quantify storytelling
+metrics, gain valuable insights into your narratives, and make the most
+of rStoryShape for your projects.
 
-### Example 1: your own embedding
+### Note: Package Reading Problems
 
-If you use your own embedding, you could use this package like the
-following examples (for more format about the embedding, please visit
-the website: <https://fasttext.cc/docs/en/unsupervised-tutorial.html>,
-in the ***Printing word vectors*** sections, click the ***Python***
-option).
+Before using the `rStoryShape` package, ensure that you have the
+following R packages installed to avoid any reading problems:
 
-***Note***: The result shows the error message due to the over-small
-size of our testing embedding file. Downloading the large size embedding
-file and put it in your local computer would solve this error.
+``` r
+library(slam)
+library(Rglpk)
+library(Matrix)
+```
+
+These packages are essential for the proper functioning of rStoryShape
+and for avoiding any issues when working with storytelling metrics.
+
+## Usage with Your Own Embedding
+
+If you wish to use your own embedding with the `rStoryShape` package,
+please follow these guidelines:
+
+1.  **Data Format**: Ensure that your corpus files are in CSV format.
+    Each CSV file should have a column named “text” (case sensitive)
+    containing the text data you want to analyze.
+
+2.  **Embedding Format**: If you intend to use your own embedding,
+    please make sure it follows the standard format as specified
+    [here](https://drive.google.com/uc?export=download&id=1koC_c7U2vXJQyl1jAtUa8W7holN1WmLf).
+    Specifically, the first column in your embedding file should be
+    named “word” (case sensitive).
+
+3.  **Embedding File Format**: Your embedding file can be in either CSV
+    or Rdata format (files end with “.csv” or “.Rdata”). Ensure that
+    your embedding data adheres to the required structure.
+
+By following these steps, you can seamlessly use your own embeddings
+with the `rStoryShape` package, allowing for customized analysis of
+storytelling metrics.
+
+For more details and examples, refer to the package documentation.
+
+### A Simple Example
 
 ``` r
 library(rStoryShape)
@@ -56,69 +118,47 @@ library(rStoryShape)
 #  ,   b1 b2 b3 b4 ... b299 b300
 # ...  .. .. .. .. ...  ..   ..
 # the  n1 n2 n3 n4 ... n299 n300
-load("data/ft_model_test.Rdata")
-load("data/corpus.Rdata")
-final_return_df <- data.frame()
-for (i in seq_len(nrow(corpus))) {
-    try_result <- tryCatch(
-      {
-        df_sin<-as.data.frame(corpus[i,])
-        text <- data.frame('text'=corpus[i,'text'])
-        
-        ## Set the type of windows as sentence and make window_length =1, then we could split the text according to each sentence
-        result <- CalculateTextStructure_updatedTSP(text,input_words=new_model,type_of_window = 'sentence',window_length = 1)
-        result_combined <- cbind(
-          df_sin,
-          result[[1]][c('speed', 'volume', 'circuitousness')]
-        )
-        final_return_df <- rbind(final_return_df, result_combined)
-        print(i)
-      },
-      error = function(err) {
-        cat("Error occurred for row", i, ": ", conditionMessage(err), "\n")
-      }
-    )
-    
-    if (inherits(try_result, "try-error")) {
-      cat("Skipping row", i, "\n")
-    }
-  }
+
+## You could replace the path here with the path you save your embedding
+path_for_emb<-"data/ft_model_test.Rdata"
+path_for_corpus<-"data/corpus.Rdata"
+result<-get_the_data(path_for_corpus, path_for_emb, own_emb=FALSE,type_of_window = "length", window_length = 10)
 #> [1] "Windows calculated ..."
-#> Error occurred for row 1 :  subscript out of bounds 
+#> [1] "Speed calculated ..."
+#> [1] "Volume calculated ..."
+#> [1] "Circuitousness calculated ..."
+#> [1] 1
 #> [1] "Windows calculated ..."
-#> Error occurred for row 2 :  subscript out of bounds 
+#> [1] "Speed calculated ..."
+#> [1] "Volume calculated ..."
+#> [1] "Circuitousness calculated ..."
+#> [1] 2
 #> [1] "Windows calculated ..."
-#> Error occurred for row 3 :  subscript out of bounds 
+#> [1] "Speed calculated ..."
+#> [1] "Volume calculated ..."
+#> [1] "Circuitousness calculated ..."
+#> [1] 3
 #> [1] "Windows calculated ..."
-#> Error occurred for row 4 :  subscript out of bounds 
+#> [1] "Speed calculated ..."
+#> [1] "Volume calculated ..."
+#> [1] "Circuitousness calculated ..."
+#> [1] 4
 #> [1] "Windows calculated ..."
-#> Error occurred for row 5 :  subscript out of bounds
-  
-  # Print or further process the final_return_df
-  print(final_return_df)
-#> data frame with 0 columns and 0 rows
+#> [1] "Speed calculated ..."
+#> [1] "Volume calculated ..."
+#> [1] "Circuitousness calculated ..."
+#> [1] 5
+print(result)
+#>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   corpus[i, ]
+#> 1               In a dusty, old attic of her family's century-old house, young Emily discovered a mysterious key with an intricate design. The key had been hidden inside a long-forgotten chest. It was made of an unknown metal, with peculiar symbols etched into it.\nEmily's curiosity got the best of her. As she embarked on a journey to uncover the key's origins, she stumbled upon a hidden door tucked away in the attic's corner. The key, it turned out, was the missing piece of the puzzle.\nUpon turning the key in the lock, a portal emerged, and Emily stepped into an entirely different world—a realm of enchantment, magical creatures, and breathtaking landscapes. She found herself in a place where reality blended with fantasy.\nThere, she made friends with talking animals, met mythical beings, and even learned to cast spells. Emily's life had transformed into a wondrous adventure she could have never imagined.\nYet, her newfound world was not without challenges. She soon discovered that an evil sorcerer sought the key for his nefarious purposes, and it was up to Emily to protect the key, her new friends, and the magical world from his dark intentions.
+#> 2                                                                                                                                                    Amelia, a shy artist, had always felt like an outsider in the bustling city. One day, while working in her cluttered studio, she noticed a scruffy stray cat outside her window. Instead of chasing the cat away, she felt an inexplicable connection.\nAmelia started leaving food and water for the cat, and over time, it became a regular visitor to her studio. What was unusual, though, was that this cat seemed to understand her in a way no human ever had. They would sit together for hours, and it was as if the cat could feel her emotions.\nAs Amelia opened up to her newfound feline friend, they began going on adventures around the city. The cat, who she named Whiskers, led her to hidden places, introduced her to kind-hearted people, and helped her break out of her shell.\nTheir unusual friendship taught her that connections can be found in the most unexpected places and that the quietest voices often have the most to say. Amelia realized that she had found a lifelong friend who accepted her just as she was.
+#> 3                                                                                                                                                                        In the attic of their family home, Mark discovered an old, leather-bound diary. It had belonged to a distant ancestor, and as he started reading, he realized it was no ordinary diary. Whenever he wrote a date and an entry, he was transported to that moment in history.\nWith the diary in hand, Mark visited the roaring '20s, witnessed pivotal moments of history, and even met some of his heroes. He was amazed by the incredible power this diary held, but he soon realized that it came with great responsibility.\nAs he explored different time periods, he uncovered secrets about his family, the diary's creation, and its potential consequences. The diary's magic was not to be taken lightly.\nMark was faced with dilemmas of whether to change the past or simply observe, ultimately questioning what made him travel through time in the first place. Through his adventures, he learned the value of appreciating the present and that the past, even with its flaws, had shaped the world he knew today.
+#> 4 Dr. Elizabeth Grant, a passionate archaeologist, stumbled upon an ancient map in an old library. The map pointed to a long-lost city deep within an uncharted jungle, a place believed to be the stuff of legends.\nWith a team of researchers and explorers, she set out on an expedition to find the fabled city. As they trekked through dense foliage, deciphered cryptic clues, and faced treacherous terrain, the team began to question if the city was a mere myth.\nBut their determination and the unwavering belief in their mission led them onward. As they got closer to their destination, they encountered unexpected challenges—hostile wildlife, unforgiving weather, and mysterious phenomena that defied explanation.\nAs they finally reached the hidden city, they realized that the legends were not mere stories. The city held secrets, relics, and technologies that could change the course of history. But they also discovered that they were not the first to find it; another expedition, led by Dr. Grant's longtime rival, had followed their every move.\nNow, they faced a race against time to unlock the secrets of the lost city before it fell into the wrong hands.
+#> 5   Samantha, a struggling writer, stumbled upon a quaint, old bookstore tucked away in a hidden corner of the city. This wasn't just any bookstore—it was known to appear only when one truly needed it.\nInside, she found shelves filled with books that, when opened, had the power to make the characters and worlds come to life. The stories she read would materialize before her eyes, and Samantha soon realized the immense potential of this bookstore.\nHowever, as she delved deeper into the magical books, she discovered that these stories were not mere fantasies—they had real consequences beyond the pages. Her words and decisions in the stories began to affect her life and the lives of those around her.\nSamantha had to navigate a fine line between her dreams and reality, learning that the power of storytelling was a responsibility. The magical bookstore not only brought stories to life but revealed the power of words, imagination, and the ability to shape her own destiny.\nThese stories are starting points for your imagination. Feel free to expand upon them, develop characters, and explore the worlds they inhabit to create your own unique narratives.
+#>       speed      volume circuitousness
+#> 1 0.2837922 0.009686199     0.08965507
+#> 2 0.2707053 0.009876095     0.13611780
+#> 3 0.2625805 0.010010524     0.09157344
+#> 4 0.2609159 0.009834105     0.08974452
+#> 5 0.2344426 0.009301359     0.10763818
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
