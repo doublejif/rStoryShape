@@ -2,7 +2,7 @@
 % Please edit documentation in R/CalculateTextStructure_updatedTSP.R
 \name{CalculateTextStructure_updatedTSP}
 \alias{CalculateTextStructure_updatedTSP}
-\title{Speed, volume and circuitousness calculation for one single row of text}
+\title{Calculate the speed, volume, and circuitousness for a single row of text.}
 \usage{
 CalculateTextStructure_updatedTSP(
   corpus,
@@ -14,23 +14,23 @@ CalculateTextStructure_updatedTSP(
 )
 }
 \arguments{
-\item{corpus}{This includes the file you want to analysis, one row only. The text must be contained in column "text" (or it woundn't work)}
+\item{corpus}{A data frame containing the text you want to analyze in a single row. The text must be in a column named "text."}
 
-\item{input_words}{This is the embedding you want to use. Default embedding could be downloaded with this link \url{https://drive.google.com/uc?export=download&id=1Nq--lnyG_9cLdjcjVPe4tVl3nqyIm8WT}. If you want to create your own embedding, the first column must be "word" and contain the actual words, and follows the embedding matrix. You could take a look at the standard format of embedding by running View()}
+\item{input_words}{The embedding to use. You can download the default embedding from this link: \url{https://drive.google.com/uc?export=download&id=1Nq--lnyG_9cLdjcjVPe4tVl3nqyIm8WT}. If you want to create your own embedding, the first column must be named "word" and contain the actual words, followed by the embedding matrix. You can examine the standard format of the embedding by running View().}
 
-\item{type_of_window}{Default="sentence". Two alternative values, "sentence" or "length". "length" means that you want to divide the text with exactly the length of words. And 'sentence' means that your dividing never break a sentence in the middle point but finish the sentences instead.}
+\item{type_of_window}{Default="sentence". Choose between "sentence" or "length." "length" divides the text by the specified word length, while 'sentence' ensures that sentences are not split in the middle but finished instead.}
 
-\item{window_length}{Int, While type_of_window="length", it will divided the text with the length of exactly this value. Here you could set the length of windows=1 and type_of_window="length" to seperate the text with each sentence}
+\item{window_length}{An integer used when type_of_window="length" to divide the text into segments of the specified word length. You can set the length of windows to 1 and type_of_window to "length" to separate the text by each sentence.}
 
-\item{include_extension_speed}{Include additional result or not. Default=False.(If True, then speed of program may be slow)}
+\item{include_extension_speed}{Include additional results or not. Default=False. (If True, program execution may be slower)}
 
-\item{include_extension_volume}{Include additional volumn or not. Default=False.(If True, then speed of program may be slow)}
+\item{include_extension_volume}{Include additional results or not. Default=False. (If True, program execution may be slower)}
 }
 \value{
-The speed, volume and circuitousness of the text.
+A data frame containing the calculated speed, volume, and circuitousness of the text.
 }
 \description{
-Speed, volume and circuitousness calculation for one single row of text
+Calculate the speed, volume, and circuitousness for a single row of text.
 }
 \examples{
 library(rStoryShape)
@@ -40,8 +40,8 @@ final_return_df <- data.frame()
 for (i in seq_len(nrow(last_sheet_data))) {
   try_result <- tryCatch(
     {
-      df_sin <- as.data.frame(last_sheet_data[i, ])
-      text <- as.data.frame(last_sheet_data[i, 2])
+      df_sin <- as.data.frame(corpus[i, ],col.names=names(corpus))
+      text <- data.frame('text'=last_sheet_data[i, 'text'])
       result <- CalculateTextStructure_updatedTSP(text, input_words = ft_model, type_of_window = "length", window_length = 10)
       result_combined <- cbind(
         df_sin,
@@ -54,10 +54,12 @@ for (i in seq_len(nrow(last_sheet_data))) {
       cat("Error occurred for row", i, ": ", conditionMessage(err), "\n")
     }
   )
-  print(final_return_df)
+  print(final_return_df[,ncol(corpus):ncol(final_return_df)])
 
   if (inherits(try_result, "try-error")) {
     cat("Skipping row", i, "\n")
   }
 }
+
+
 }

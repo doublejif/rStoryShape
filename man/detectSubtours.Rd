@@ -2,20 +2,20 @@
 % Please edit documentation in R/detectSubtours.R
 \name{detectSubtours}
 \alias{detectSubtours}
-\title{Subtours detection function}
+\title{Detect subtours in a given traveling salesman problem (TSP) route.}
 \usage{
 detectSubtours(x_tsp, idxs)
 }
 \arguments{
-\item{x_tsp}{The tours track matrix with two columns}
+\item{x_tsp}{The matrix representing the tour's tracks with two columns.}
 
-\item{idxs}{The distance matrix of the cities}
+\item{idxs}{The distance matrix of the cities.}
 }
 \value{
-All possible subtour in our route results
+A list of all possible subtours found in the TSP route.
 }
 \description{
-Subtours detection function
+Detect subtours in a given traveling salesman problem (TSP) route.
 }
 \examples{
 detectSubtours(x_tsp, idxs)

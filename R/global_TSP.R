@@ -1,11 +1,13 @@
-#' The function used to find out the shortest path. Solving the TSP problem with first and last destinations fixed.
+#' Find the shortest path in a traveling salesman problem (TSP) with the first and last destinations fixed.
 #'
-#' @param cities position_windows (which could be seen as the characteristic matrix of each windows of the text), which is a vector_based matrix. With 300-dim each row.
+#' @param position_windows A vector-based matrix representing the characteristic matrix of each text window. Each row has 300 dimensions.
 #'
-#' @return The route and the distance of the shortest path
+#' @return A list containing the route and the distance of the shortest path.
 #' @export
 #'
-#' @examples global_TSP
+#' @examples
+#' global_TSP(position_windows)
+
 global_TSP <- function(cities) {
   ### Work out the shorttest route globally
   ### cities is the position_windows here. Which is a vector_based matrix. With 300-dim each row

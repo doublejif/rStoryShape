@@ -100,9 +100,10 @@ library(rStoryShape)
 
 ## You could replace the path here with the path you save your embedding
 path_for_emb<-"data/ft_model_test.Rdata"
+## You could replace the path here with the path you save your corpus
 path_for_corpus<-"data/corpus.Rdata"
 result<-get_the_data(path_for_corpus, path_for_emb, own_emb=FALSE,type_of_window = "length", window_length = 10)
-print(result)
+print(result[,2:ncol(result)])
 ```
 
 

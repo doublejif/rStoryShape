@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_the_data.R
 \name{get_the_data}
 \alias{get_the_data}
-\title{The main runner for the code. Get the charateristics summary of speed, volumne and circuitousness}
+\title{Calculate the characteristics summary of speed, volume, and circuitousness for the given text corpus.}
 \usage{
 get_the_data(
   path_for_corpus,
@@ -15,30 +15,32 @@ get_the_data(
 )
 }
 \arguments{
-\item{path_for_corpus}{The path of your corpus. It should be an csv file with your text column be named as "text"}
+\item{path_for_corpus}{The path of your corpus. It should be in CSV format with a "text" column.}
 
-\item{path_for_emb}{If own_emb=FALSE, it means that you would use the embedding we provided.Then this parameter should be the path you put the downloaded Rdata (link: \url{https://drive.google.com/uc?export=download&id=1Nq--lnyG_9cLdjcjVPe4tVl3nqyIm8WT}). If own_emb=TRUE, it means that you would use the your own embedding. Please prepare the embedding (csv file) with standard format. You could download the sample embedding with standard format with this link\url{https://drive.google.com/uc?export=download&id=1koC_c7U2vXJQyl1jAtUa8W7holN1WmLf}.}
+\item{path_for_emb}{If own_emb=FALSE, it means you are using the provided embedding. In this case, this parameter should be the path to the downloaded RData file (link: \url{https://drive.google.com/uc?export=download&id=1Nq--lnyG_9cLdjcjVPe4tVl3nqyIm8WT}). If own_emb=TRUE, you are using your own embedding. Please prepare the embedding (CSV file) in a standard format. You can download a sample embedding with the standard format from this link \url{https://drive.google.com/uc?export=download&id=1koC_c7U2vXJQyl1jAtUa8W7holN1WmLf}.}
 
-\item{own_emb}{Default=FALSE. Use your own embedding or not}
+\item{own_emb}{Default=FALSE. Set to TRUE to use your own embedding.}
 
-\item{type_of_window}{Default="sentence". Two alternative values, "sentence" or "length". "length" means that you want to divide the text with exactly the length of words. 'sentence' means that while dividing the windows, the function never break a sentence in the middle point but finish the sentences instead.}
+\item{type_of_window}{Default="sentence". There are two alternative values: "sentence" or "length." Use "length" if you want to divide the text by a specified word length. "sentence" ensures that the function doesn't break sentences in the middle but finishes them.}
 
-\item{window_length}{Integer, While type_of_window="length", it will divided the text with the length of exactly this value. Here you could set the length of windows=1 and type_of_window="length" to seperate the text with each sentence}
+\item{window_length}{Integer. When type_of_window="length," it divides the text into windows of this specified word length. You can set the length of windows to 1 and type_of_window to "length" to separate the text into individual sentences.}
 
-\item{include_extension_speed}{Include additional result or not. Default=False.(If True, then speed of program may be slow)}
+\item{include_extension_speed}{Include additional result or not. Default=False. (If True, program execution may be slower)}
 
-\item{include_extension_volume}{Include additional volumn or not. Default=False.(If True, then speed of program may be slow)}
+\item{include_extension_volume}{Include additional volume or not. Default=False. (If True, program execution may be slower)}
 }
 \value{
-A dataset, which includes the speed, volume and circuitousness of the text.
+A dataset containing the calculated speed, volume, and circuitousness of the text.
 }
 \description{
-The main runner for the code. Get the charateristics summary of speed, volumne and circuitousness
+Calculate the characteristics summary of speed, volume, and circuitousness for the given text corpus.
 }
 \examples{
 library(rStoryShape)
 path_for_emb <- "data/ft_model_test.Rdata"
 path_for_corpus <- "data/corpus.Rdata"
-result <- get_the_data(path_for_corpus, path_for_emb, own_emb=FALSE,type_of_window = "length", window_length = 10)
+result <- get_the_data(path_for_corpus, path_for_emb, own_emb=FALSE, type_of_window = "length", window_length = 10)
 print(result)
+
+
 }

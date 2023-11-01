@@ -2,19 +2,19 @@
 % Please edit documentation in R/global_TSP.R
 \name{global_TSP}
 \alias{global_TSP}
-\title{The function used to find out the shortest path. Solving the TSP problem with first and last destinations fixed.}
+\title{Find the shortest path in a traveling salesman problem (TSP) with the first and last destinations fixed.}
 \usage{
 global_TSP(cities)
 }
 \arguments{
-\item{cities}{position_windows (which could be seen as the characteristic matrix of each windows of the text), which is a vector_based matrix. With 300-dim each row.}
+\item{position_windows}{A vector-based matrix representing the characteristic matrix of each text window. Each row has 300 dimensions.}
 }
 \value{
-The route and the distance of the shortest path
+A list containing the route and the distance of the shortest path.
 }
 \description{
-The function used to find out the shortest path. Solving the TSP problem with first and last destinations fixed.
+Find the shortest path in a traveling salesman problem (TSP) with the first and last destinations fixed.
 }
 \examples{
-global_TSP
+global_TSP(position_windows)
 }

@@ -1,12 +1,15 @@
-#' Subtours detection function
+#' Detect subtours in a given traveling salesman problem (TSP) route.
 #'
-#' @param x_tsp The tours track matrix with two columns
-#' @param idxs The distance matrix of the cities
+#' @param x_tsp The matrix representing the tour's tracks with two columns.
+#' @param idxs The distance matrix of the cities.
 #'
-#' @return All possible subtour in our route results
+#' @return A list of all possible subtours found in the TSP route.
 #' @export
 #'
-#' @examples detectSubtours(x_tsp, idxs)
+#' @examples
+#' detectSubtours(x_tsp, idxs)
+
+
 detectSubtours <- function(x_tsp, idxs) {
   subTours <- list()
   x <- round(x_tsp)
