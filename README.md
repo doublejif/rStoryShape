@@ -28,7 +28,36 @@ impact. - Empower your storytelling research and analysis.
 With `rStoryShape`, you can harness the science of storytelling to
 create more engaging and impactful narratives.
 
-## Installation
+## Installing R and RStudio
+
+Before using the “rStoryShape” package, you need to have both R and
+RStudio installed on your system.
+
+### 1. Installing R
+
+- Visit the [Comprehensive R Archive Network (CRAN)
+  website](https://cran.r-project.org/).
+- Choose a mirror site near you.
+- Download the appropriate version of R for your operating system
+  (Windows, macOS, or Linux).
+- Follow the installation instructions provided on the website.
+
+### 2. Installing RStudio
+
+RStudio is an integrated development environment (IDE) that provides a
+user-friendly interface for working with R. To install RStudio:
+
+- Visit the [RStudio download
+  page](https://www.rstudio.com/products/rstudio/download/).
+- Choose the version of RStudio suitable for your operating system.
+- Download and install RStudio following the installation instructions
+  on the website.
+
+Once both R and RStudio are installed, you can open RStudio, and you are
+ready to use the “rStoryShape” package for your data analysis and
+visualization needs.
+
+## Installation of the package
 
 To use the `rStoryShape` R package, follow these steps:
 
