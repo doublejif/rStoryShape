@@ -63,12 +63,13 @@ Before you can install `rStoryShape`, you may need to install the `devtools` pac
 
 ```r
 install.packages("devtools")
+install.packages("remotes")
 ```
 ### Step 2: Install rStoryShape
 With devtools installed, you can proceed to install rStoryShape from our GitHub repository. Use the following R code:
 
 ```r
-devtools::install_github("doublejif/rStoryShape")
+remotes::install_github("doublejif/rStoryShape")
 ```
 ### Step 3: Download the FastText Embedding File
 To make the most of rStoryShape, you'll need to download the fastText embedding file in RData format. This file is quite large (approximately 4.63GB), so make sure you have sufficient disk space. You can download it using the following link:

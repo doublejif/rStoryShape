@@ -69,6 +69,7 @@ the following command in your R environment:
 
 ``` r
 install.packages("devtools")
+install.packages("remotes")
 ```
 
 ### Step 2: Install rStoryShape
@@ -77,7 +78,7 @@ With devtools installed, you can proceed to install rStoryShape from our
 GitHub repository. Use the following R code:
 
 ``` r
-devtools::install_github("doublejif/rStoryShape")
+remotes::install_github("doublejif/rStoryShape")
 ```
 
 ### Step 3: Download the FastText Embedding File
